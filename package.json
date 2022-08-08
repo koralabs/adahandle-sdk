@@ -1,0 +1,35 @@
+{
+  "name": "@koralabs/adahandle-sdk",
+  "version": "0.1.0",
+  "description": "SDK for ADA Handle",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "url": "https://github.com/koralabs/adahandle-sdk",
+  "keywords": [
+    "cardano",
+    "ada handle",
+    "handle"
+  ],
+  "contributors": [
+    {
+      "name": "calvin"
+    }
+  ],
+  "scripts": {
+    "test": "node node_modules/.bin/jest",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^28.1.1",
+    "jest": "^28.1.1",
+    "ts-jest": "^28.0.4",
+    "typescript": "^4.7.3"
+  },
+  "dependencies": {},
+  "files": [
+    "bin",
+    "lib"
+  ]
+}
