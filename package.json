@@ -4,7 +4,10 @@
   "description": "SDK for ADA Handle",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "url": "https://github.com/koralabs/adahandle-sdk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koralabs/adahandle-sdk.git"
+  },
   "keywords": [
     "cardano",
     "ada handle",
