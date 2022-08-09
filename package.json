@@ -10,6 +10,10 @@
         "ada handle",
         "handle"
     ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/koralabs/adahandle-sdk.git"
+    },
     "contributors": [
         {
             "name": "cjkoepke"
