@@ -14,7 +14,7 @@ export class ADAHandleClient {
         [ADAHandleClientContext.TESTNET]: ['8d18d786e92776c824607fd8e193ec535c79dc61ea2405ddf3b09fe3']
     };
 
-    constructor(options?: ADAHandleClientOptions) {
+    constructor(options?: Partial<ADAHandleClientOptions>) {
         this.options = {
             ...defaultOptions,
             ...options
