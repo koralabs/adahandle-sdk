@@ -3,7 +3,7 @@ import { KoraLabsProvider } from './providers/KoraLabsProvider.class';
 
 export const defaultOptions: HandleClientOptions = {
     context: HandleClientContext.MAINNET,
-    resolver: new KoraLabsProvider(HandleClientContext.MAINNET)
+    provider: new KoraLabsProvider(HandleClientContext.MAINNET)
 };
 
 export class HandleClient {
@@ -25,7 +25,7 @@ export class HandleClient {
     }
 
     public getProviderInstance() {
-        return this.options.resolver;
+        return this.options.provider;
     }
 
     public getContext(): HandleClientContext {

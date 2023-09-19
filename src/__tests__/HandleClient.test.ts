@@ -98,7 +98,7 @@ describe('HandleClient', () => {
     it('should use a custom Provider class', async () => {
         const customClient = new HandleClient({
             context: HandleClientContext.MAINNET,
-            resolver: new CustomProvider()
+            provider: new CustomProvider()
         });
 
         const provider = customClient.getProviderInstance();

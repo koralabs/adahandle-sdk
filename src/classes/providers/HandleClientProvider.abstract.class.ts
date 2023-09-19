@@ -7,6 +7,8 @@ import { isHex } from '../../utils/hex';
  * @template T - The type of data returned by the `getAllData` method.
  */
 export abstract class HandleClientProvider<T = {}> {
+    static CIP68_PREFIX = '000de140';
+
     /**
      * Abstract method to retrieve the Cardano address for a given handle.
      *
@@ -44,14 +46,34 @@ export abstract class HandleClientProvider<T = {}> {
     abstract getAllData: (handle: string) => Promise<T>;
 
     /**
+     * Utility method to check whether a handle is a CIP-68 handle.
+     *
+     * @param {string} handle - The handle to check.
+     * @returns {boolean} - Whether the handle is CIP-68 or not.
+     */
+    public isCIP68(handle: string): boolean {
+        return handle.indexOf(HandleClientProvider.CIP68_PREFIX) === 0;
+    }
+
+    /**
+     * Utility method to get the normalized name of a CIP-68 or CIP-25 handle.
+     *
+     * @param {string} handle - The CIP-68 handle to parse.
+     * @returns {string}
+     */
+    public getNormalizedName(handle: string): string {
+        return handle.replace(HandleClientProvider.CIP68_PREFIX, '');
+    }
+
+    /**
      * Handles API rejection feedback for handle-specific requests.
-     * @param api
-     * @param handle
+     * @param {Promise<Response>} api - The API response, usually from fetch().
+     * @param {string} handle - The handle supplied to the lookup.
      * @returns
      */
-    protected async __handleResponse(api: Promise<Response>, handle: string) {
+    protected async __handleResponse<T>(api: Promise<Response>, handle: string) {
         return api
-            .then((res) => res.json())
+            .then((res) => res.json() as T)
             .catch((e) => {
                 console.error(
                     `Something went wrong while fetching this Handle: ${handle}.${
@@ -61,7 +83,8 @@ export abstract class HandleClientProvider<T = {}> {
                     } Here is the full error:`,
                     e
                 );
-                return {} as any;
+
+                return {} as T;
             });
     }
 }

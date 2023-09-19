@@ -7,5 +7,5 @@ export enum HandleClientContext {
 
 export interface HandleClientOptions {
     context: HandleClientContext;
-    resolver: HandleClientProvider;
+    provider: HandleClientProvider;
 }
