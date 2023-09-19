@@ -1,6 +1,7 @@
 import { IHandle } from '@koralabs/handles-public-api-interfaces';
 
 import { HandleClientProvider } from './HandleClientProvider.abstract.class';
+import { HandleClientContext } from '../../types';
 
 /**
  * KoraLabsProvider class that extends HandleClientProvider and
@@ -9,8 +10,7 @@ import { HandleClientProvider } from './HandleClientProvider.abstract.class';
  * @extends {HandleClientProvider}
  */
 export class KoraLabsProvider extends HandleClientProvider<IHandle> {
-    /** Base URL for the Handle.me API. */
-    public apiurl = 'https://api.handle.me';
+    public apiUrl: string;
 
     /** Request headers for the API. */
     private headers = new Headers();
@@ -21,11 +21,14 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
     /**
      * Creates an instance of the KoraLabsProvider.
      *
-     * @param {string} [header_key] - Optional API key for the Handle.me API.
+     * @param {string} [headerKey] - Optional API key for the Handle.me API.
      */
-    constructor(header_key?: string) {
+    constructor(public network: HandleClientContext, headerKey?: string) {
         super();
-        header_key && this.headers.append(this.API_KEY_NAME, header_key);
+        this.apiUrl = `https://${
+            network === HandleClientContext.MAINNET ? '' : `${HandleClientContext[network].toLowerCase()}.`
+        }api.handle.me`;
+        headerKey && this.headers.append(this.API_KEY_NAME, headerKey);
     }
 
     /**
@@ -36,7 +39,7 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
      */
     getCardanoAddress = async (handle: string): Promise<string> => {
         const { resolved_addresses } = await this.__handleResponse(
-            fetch(`${this.apiurl}/handles/${handle}`, {
+            fetch(`${this.apiUrl}/handles/${handle}`, {
                 headers: this.headers
             }),
             handle
@@ -52,7 +55,7 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
      */
     getBitcoinAddress = async (handle: string): Promise<string | undefined> => {
         const { resolved_addresses } = await this.__handleResponse(
-            fetch(`${this.apiurl}/handles/${handle}`, {
+            fetch(`${this.apiUrl}/handles/${handle}`, {
                 headers: this.headers
             }),
             handle
@@ -68,7 +71,7 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
      */
     getEthereumAddress = async (handle: string): Promise<string | undefined> => {
         const { resolved_addresses } = await this.__handleResponse(
-            fetch(`${this.apiurl}/handles/${handle}`, {
+            fetch(`${this.apiUrl}/handles/${handle}`, {
                 headers: this.headers
             }),
             handle
@@ -84,7 +87,7 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
      */
     getAllData = async (handle: string): Promise<IHandle> => {
         return this.__handleResponse(
-            fetch(`${this.apiurl}/handles/${handle}`, {
+            fetch(`${this.apiUrl}/handles/${handle}`, {
                 headers: this.headers
             }),
             handle

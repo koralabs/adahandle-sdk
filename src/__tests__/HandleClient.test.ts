@@ -58,13 +58,13 @@ describe('HandleClient', () => {
     it('should have setContext method', () => {
         expect(client).toHaveProperty('setContext');
         expect(client.getContext()).toEqual(HandleClientContext.MAINNET);
-        client.setContext(HandleClientContext.TESTNET);
-        expect(client.getContext()).toEqual(HandleClientContext.TESTNET);
+        client.setContext(HandleClientContext.PREVIEW);
+        expect(client.getContext()).toEqual(HandleClientContext.PREVIEW);
     });
 
     it('should have getPolicyIdsByContext method', () => {
         expect(client).toHaveProperty('getPolicyIdsByContext');
-        expect(client.getPolicyIdsByContext(HandleClientContext.TESTNET)).toEqual([
+        expect(client.getPolicyIdsByContext(HandleClientContext.PREVIEW)).toEqual([
             '8d18d786e92776c824607fd8e193ec535c79dc61ea2405ddf3b09fe3'
         ]);
         expect(client.getPolicyIdsByContext(HandleClientContext.MAINNET)).toEqual([
@@ -76,7 +76,7 @@ describe('HandleClient', () => {
         expect(client).toHaveProperty('getActivePolicyIds');
         client.setContext(HandleClientContext.MAINNET);
         expect(client.getActivePolicyIds()).toEqual(['f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a']);
-        client.setContext(HandleClientContext.TESTNET);
+        client.setContext(HandleClientContext.PREVIEW);
         expect(client.getActivePolicyIds()).toEqual(['8d18d786e92776c824607fd8e193ec535c79dc61ea2405ddf3b09fe3']);
     });
 
@@ -86,7 +86,7 @@ describe('HandleClient', () => {
         expect(client.isADAHandle('f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a')).toEqual(true);
         expect(client.isADAHandle('8d18d786e92776c824607fd8e193ec535c79dc61ea2405ddf3b09fe3')).toEqual(false);
 
-        client.setContext(HandleClientContext.TESTNET);
+        client.setContext(HandleClientContext.PREVIEW);
         expect(client.isADAHandle('f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a')).toEqual(false);
         expect(client.isADAHandle('8d18d786e92776c824607fd8e193ec535c79dc61ea2405ddf3b09fe3')).toEqual(true);
     });

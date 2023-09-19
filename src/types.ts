@@ -1,7 +1,7 @@
 import { HandleClientProvider } from './classes/providers';
 
 export enum HandleClientContext {
-    TESTNET = 0,
+    PREVIEW = 0,
     MAINNET = 1
 }
 
