@@ -1,3 +1,3 @@
-export { ADAHandleClient as default } from './ADAHandleClient';
+export { HandleClient as default } from './classes/HandleClient.class';
+export * from './classes/providers';
 export * from './types';
-export * from './ADAHandleClient';

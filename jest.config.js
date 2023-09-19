@@ -1,5 +1,5 @@
 module.exports = {
-  testEnvironment: 'node',
+  testEnvironment: 'jest-environment-jsdom',
   preset: 'ts-jest/presets/js-with-ts',
   testMatch: ['**/*.test.ts'],
   moduleFileExtensions: ["js", "ts"],
