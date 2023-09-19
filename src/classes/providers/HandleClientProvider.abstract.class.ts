@@ -44,16 +44,24 @@ export abstract class HandleClientProvider<T = {}> {
     abstract getAllData: (handle: string) => Promise<T>;
 
     /**
-     * Helper function to format a handle string to its readable encoding.
-     *
-     * @param handle Hex or UTF-8 encoded handle string.
-     * @returns UTF-8 encoded handle name as a string.
+     * Handles API rejection feedback for handle-specific requests.
+     * @param api
+     * @param handle
+     * @returns
      */
-    public resolveName(handle: string): string {
-        if (isHex(handle)) {
-            return Buffer.from(handle, 'hex').toString('utf-8');
-        }
-
-        return handle;
+    protected async __handleResponse(api: Promise<Response>, handle: string) {
+        return api
+            .then((res) => res.json())
+            .catch((e) => {
+                console.error(
+                    `Something went wrong while fetching this Handle: ${handle}.${
+                        isHex(handle)
+                            ? ` You may need to convert the Handle name to UTF-8 before providing it to this function.`
+                            : ''
+                    } Here is the full error:`,
+                    e
+                );
+                return {} as any;
+            });
     }
 }

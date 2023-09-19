@@ -1,8 +1,8 @@
 /**
- * Checks if a given string is hex encoded.
+ * Checks if a given string is valid hex representation.
  *
  * @param {string} str - The string to check.
- * @returns {boolean} - Returns `true` if the string is hex encoded, otherwise `false`.
+ * @returns {boolean} - Returns `true` if the string is a valid hex representation, otherwise `false`.
  * @example
  *
  * isHex("1a2b3c");  // returns true

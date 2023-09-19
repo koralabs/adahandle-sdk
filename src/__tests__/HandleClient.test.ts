@@ -45,7 +45,7 @@ beforeEach(() => {
     client = new HandleClient();
 });
 
-describe('ADAHandleClient', () => {
+describe('HandleClient', () => {
     it('should use default options when initialized', () => {
         expect(client).toHaveProperty('options', defaultOptions);
     });
