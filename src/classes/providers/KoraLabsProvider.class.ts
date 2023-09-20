@@ -13,7 +13,9 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
     public apiUrl: string;
 
     /** Request headers for the API. */
-    private headers = new Headers();
+    private headers = new Headers({
+        'Content-Type': 'application/json'
+    });
 
     /** Name of the API key header. */
     private API_KEY_NAME = 'HANDLE_ME_API_KEY';

@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer';
+
 import { isHex } from '../../utils/hex';
 
 /**
@@ -58,11 +60,21 @@ export abstract class HandleClientProvider<T = {}> {
     /**
      * Utility method to get the normalized name of a CIP-68 or CIP-25 handle.
      *
-     * @param {string} handle - The CIP-68 handle to parse.
+     * @param {string} handle - The CIP-68 or CIP-25 handle to parse.
      * @returns {string}
      */
     public getNormalizedName(handle: string): string {
-        return handle.replace(HandleClientProvider.CIP68_PREFIX, '');
+        return this.isCIP68(handle) ? handle.replace(HandleClientProvider.CIP68_PREFIX, '') : handle;
+    }
+
+    /**
+     * Utility method to get the HEX-encoded name of the CIP-68 or CIP-25 handle.
+     *
+     * @param {string} handle - The CIP-68 or CIP-25 handle to parse.
+     * @returns {string}
+     */
+    public getEncodedName(handle: string): string {
+        return isHex(handle) ? handle : Buffer.from(handle).toString('hex');
     }
 
     /**

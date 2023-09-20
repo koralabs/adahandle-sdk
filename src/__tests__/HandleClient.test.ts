@@ -1,6 +1,6 @@
-import { HandleClient, defaultOptions } from '../classes/HandleClient.class';
+import { HandleClient } from '../classes/HandleClient.class';
 import { HandleClientProvider, KoraLabsProvider } from '../classes/providers';
-import { HandleClientContext } from '../types';
+import { HandleClientContext, HandleClientOptions } from '../types';
 
 let client: HandleClient;
 
@@ -9,25 +9,25 @@ class CustomProvider extends HandleClientProvider {
         super();
     }
 
-    getCardanoAddress = async () => {
+    getCardanoAddress = async (handle: string) => {
         return new Promise<string>((res) => {
             setTimeout(() => res('cardanoaddress'), 1000);
         });
     };
 
-    getBitcoinAddress = async () => {
+    getBitcoinAddress = async (handle: string) => {
         return new Promise<string>((res) => {
             setTimeout(() => res('bitcoinaddress'), 1000);
         });
     };
 
-    getEthereumAddress = async () => {
+    getEthereumAddress = async (handle: string) => {
         return new Promise<string>((res) => {
             setTimeout(() => res('ethereumaddress'), 1000);
         });
     };
 
-    getAllData = async () => {
+    getAllData = async (handle: string) => {
         return new Promise<Record<string, string>>((res) => {
             setTimeout(
                 () =>
@@ -40,9 +40,14 @@ class CustomProvider extends HandleClientProvider {
     };
 }
 
+const defaultOptions: HandleClientOptions<KoraLabsProvider> = {
+    context: HandleClientContext.MAINNET,
+    provider: new KoraLabsProvider(HandleClientContext.MAINNET)
+};
+
 // Setup.
 beforeEach(() => {
-    client = new HandleClient();
+    client = new HandleClient(defaultOptions);
 });
 
 describe('HandleClient', () => {
@@ -92,7 +97,7 @@ describe('HandleClient', () => {
     });
 
     it('should default to the KoraLabsProvider if none provided', async () => {
-        expect(client.getProviderInstance()).toBeInstanceOf(KoraLabsProvider);
+        expect(client.provider()).toBeInstanceOf(KoraLabsProvider);
     });
 
     it('should use a custom Provider class', async () => {
@@ -101,7 +106,7 @@ describe('HandleClient', () => {
             provider: new CustomProvider()
         });
 
-        const provider = customClient.getProviderInstance();
+        const provider = customClient.provider();
         expect(provider).toBeInstanceOf(CustomProvider);
         expect(await provider.getCardanoAddress('myhandle')).toEqual('cardanoaddress');
         expect(await provider.getBitcoinAddress('myhandle')).toEqual('bitcoinaddress');
