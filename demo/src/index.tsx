@@ -1,13 +1,9 @@
 import { Buffer } from 'buffer';
 import { FC, useCallback, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import HandleClient, {
-    BlockfrostHandle,
-    BlockfrostProvider,
-    HandleClientContext,
-    HandleClientProvider,
-    KoraLabsProvider
-} from '../../lib';
+import HandleClient, { HandleClientContext, HandleClientProvider, KoraLabsProvider } from '../../lib';
+import { BlockfrostHandle, BlockfrostProvider } from '../../lib/classes/providers/BlockfrostProvider.class';
+
 import { IHandle } from '@koralabs/handles-public-api-interfaces';
 import JSONView from 'react-json-view';
 
