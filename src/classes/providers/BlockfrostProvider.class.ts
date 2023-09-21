@@ -1,4 +1,5 @@
 import { IHandle } from '@koralabs/handles-public-api-interfaces';
+import fetch from 'cross-fetch';
 import type { components } from '@blockfrost/openapi';
 
 import { HandleClientProvider } from './HandleClientProvider.abstract.class';

@@ -38,7 +38,8 @@
     },
     "dependencies": {
         "@koralabs/handles-public-api-interfaces": "^2.11.2",
-        "buffer": "^6.0.3"
+        "buffer": "^6.0.3",
+        "cross-fetch": "^4.0.0"
     },
     "files": [
         "bin",
