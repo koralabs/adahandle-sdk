@@ -1,3 +1,4 @@
+declare var BLOCKFROST_PROJECT_ID: string;
 import { Buffer } from 'buffer';
 import { FC, useCallback, useState } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -14,7 +15,6 @@ const KoraInstance = new HandleClient({
 
 const BlockfrostInstance = new HandleClient({
     context: HandleClientContext.MAINNET,
-    // @ts-ignore The BLOCKFROST_API_KEY gets overwritten in webpack config.
     provider: new BlockfrostProvider(HandleClientContext.MAINNET, BLOCKFROST_PROJECT_ID)
 });
 

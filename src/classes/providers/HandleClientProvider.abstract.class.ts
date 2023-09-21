@@ -1,4 +1,5 @@
 import { Buffer } from 'buffer';
+import { AssetNameLabel } from '@koralabs/handles-public-api-interfaces';
 
 import { isHex } from '../../utils/hex';
 
@@ -9,8 +10,6 @@ import { isHex } from '../../utils/hex';
  * @template T - The type of data returned by the `getAllData` method.
  */
 export abstract class HandleClientProvider<T = {}> {
-    static CIP68_PREFIX = '000de140';
-
     /**
      * Abstract method to retrieve the Cardano address for a given handle.
      *
@@ -54,7 +53,7 @@ export abstract class HandleClientProvider<T = {}> {
      * @returns {boolean} - Whether the handle is CIP-68 or not.
      */
     public isCIP68(handle: string): boolean {
-        return handle.indexOf(HandleClientProvider.CIP68_PREFIX) === 0;
+        return handle.indexOf(AssetNameLabel.LABEL_222) === 0;
     }
 
     /**
@@ -64,7 +63,7 @@ export abstract class HandleClientProvider<T = {}> {
      * @returns {string}
      */
     public getNormalizedName(handle: string): string {
-        return this.isCIP68(handle) ? handle.replace(HandleClientProvider.CIP68_PREFIX, '') : handle;
+        return this.isCIP68(handle) ? handle.replace(AssetNameLabel.LABEL_222, '') : handle;
     }
 
     /**
