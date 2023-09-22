@@ -1,6 +1,7 @@
 import { IHandle } from '@koralabs/handles-public-api-interfaces';
 import fetch from 'cross-fetch';
 
+import { HandleClient } from '../HandleClient.class';
 import { HandleClientProvider } from './HandleClientProvider.abstract.class';
 import { HandleClientContext } from '../../types';
 
@@ -42,10 +43,10 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
      */
     getCardanoAddress = async (handle: string): Promise<string> => {
         const { resolved_addresses } = await this.__handleResponse<IHandle>(
-            fetch(`${this.apiUrl}/handles/${this.getNormalizedName(handle)}`, {
+            fetch(`${this.apiUrl}/handles/${HandleClient.getNormalizedName(handle)}`, {
                 headers: this.headers
             }),
-            this.getNormalizedName(handle)
+            HandleClient.getNormalizedName(handle)
         );
         return resolved_addresses.ada;
     };
@@ -58,10 +59,10 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
      */
     getBitcoinAddress = async (handle: string): Promise<string | undefined> => {
         const { resolved_addresses } = await this.__handleResponse<IHandle>(
-            fetch(`${this.apiUrl}/handles/${this.getNormalizedName(handle)}`, {
+            fetch(`${this.apiUrl}/handles/${HandleClient.getNormalizedName(handle)}`, {
                 headers: this.headers
             }),
-            this.getNormalizedName(handle)
+            HandleClient.getNormalizedName(handle)
         );
         return resolved_addresses?.btc;
     };
@@ -74,10 +75,10 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
      */
     getEthereumAddress = async (handle: string): Promise<string | undefined> => {
         const { resolved_addresses } = await this.__handleResponse<IHandle>(
-            fetch(`${this.apiUrl}/handles/${this.getNormalizedName(handle)}`, {
+            fetch(`${this.apiUrl}/handles/${HandleClient.getNormalizedName(handle)}`, {
                 headers: this.headers
             }),
-            this.getNormalizedName(handle)
+            HandleClient.getNormalizedName(handle)
         );
         return resolved_addresses?.eth;
     };
@@ -90,10 +91,10 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
      */
     getAllData = async (handle: string): Promise<IHandle> => {
         return this.__handleResponse<IHandle>(
-            fetch(`${this.apiUrl}/handles/${this.getNormalizedName(handle)}`, {
+            fetch(`${this.apiUrl}/handles/${HandleClient.getNormalizedName(handle)}`, {
                 headers: this.headers
             }),
-            this.getNormalizedName(handle)
+            HandleClient.getNormalizedName(handle)
         );
     };
 }

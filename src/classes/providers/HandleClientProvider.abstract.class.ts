@@ -2,6 +2,7 @@ import { Buffer } from 'buffer';
 import { AssetNameLabel } from '@koralabs/handles-public-api-interfaces';
 
 import { isHex } from '../../utils/hex';
+import { HandleClient } from '../HandleClient.class';
 
 /**
  * Abstract class `HandleClientProvider` serving as a template for
@@ -45,36 +46,6 @@ export abstract class HandleClientProvider<T = {}> {
      * @returns {Promise<T>} - A promise that resolves to the handle data.
      */
     abstract getAllData: (handle: string) => Promise<T>;
-
-    /**
-     * Utility method to check whether a handle is a CIP-68 handle.
-     *
-     * @param {string} handle - The handle to check.
-     * @returns {boolean} - Whether the handle is CIP-68 or not.
-     */
-    public isCIP68(handle: string): boolean {
-        return handle.indexOf(AssetNameLabel.LABEL_222) === 0;
-    }
-
-    /**
-     * Utility method to get the normalized name of a CIP-68 or CIP-25 handle.
-     *
-     * @param {string} handle - The CIP-68 or CIP-25 handle to parse.
-     * @returns {string}
-     */
-    public getNormalizedName(handle: string): string {
-        return this.isCIP68(handle) ? handle.replace(AssetNameLabel.LABEL_222, '') : handle;
-    }
-
-    /**
-     * Utility method to get the HEX-encoded name of the CIP-68 or CIP-25 handle.
-     *
-     * @param {string} handle - The CIP-68 or CIP-25 handle to parse.
-     * @returns {string}
-     */
-    public getEncodedName(handle: string): string {
-        return isHex(handle) ? handle : Buffer.from(handle).toString('hex');
-    }
 
     /**
      * Handles API rejection feedback for handle-specific requests.
