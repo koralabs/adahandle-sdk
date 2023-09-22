@@ -47,10 +47,6 @@ export class HandleClient<T = KoraLabsProvider> {
      * @throws
      */
     static isCIP68(handle: string): boolean {
-        if (!isHex(handle)) {
-            throw new Error('Handle should be in valid HEX format.');
-        }
-
         return handle.indexOf(AssetNameLabel.LABEL_222) === 0;
     }
 
@@ -73,10 +69,6 @@ export class HandleClient<T = KoraLabsProvider> {
      * @throws
      */
     static getEncodedName(handle: string, assetNameLabel?: AssetNameLabel): string {
-        if (isHex(handle)) {
-            throw new Error('Handle should be in valid UTF-8 format.');
-        }
-
         const name = Buffer.from(handle).toString('hex');
         return assetNameLabel ? `${assetNameLabel}${name}` : name;
     }

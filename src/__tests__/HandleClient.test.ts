@@ -118,7 +118,6 @@ describe('HandleClient', () => {
     });
 
     test('isCIP68', () => {
-        expect(() => HandleClient.isCIP68('test')).toThrowError('Handle should be in valid HEX format.');
         expect(HandleClient.isCIP68('000de140706f707a')).toBeTruthy();
         expect(HandleClient.isCIP68('63616c76696e')).toBeFalsy();
     });
@@ -126,14 +125,10 @@ describe('HandleClient', () => {
     test('getNormalizedName', () => {
         expect(HandleClient.getNormalizedName('000de140706f707a')).toEqual('popz');
         expect(HandleClient.getNormalizedName('63616c76696e')).toEqual('calvin');
-        expect(() => HandleClient.getNormalizedName('aaron')).toThrowError('Handle should be in valid HEX format.');
     });
 
     test('getEncodedName', () => {
         expect(HandleClient.getEncodedName('popz', AssetNameLabel.LABEL_222)).toEqual('000de140706f707a');
         expect(HandleClient.getEncodedName('calvin')).toEqual('63616c76696e');
-        expect(() => HandleClient.getEncodedName('63616c76696e')).toThrowError(
-            'Handle should be in valid UTF-8 format.'
-        );
     });
 });
