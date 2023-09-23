@@ -1,13 +1,11 @@
-export enum ADAHandleClientContext {
-    TESTNET = 0,
+import { HandleClientProvider, KoraLabsProvider } from './classes/providers';
+
+export enum HandleClientContext {
+    PREVIEW = 0,
     MAINNET = 1
 }
 
-export interface ADAHandleClientFetchResponse {
-    address: string;
-}
-
-export interface ADAHandleClientOptions {
-    context: ADAHandleClientContext;
-    resolver: (handle: string) => Promise<ADAHandleClientFetchResponse>;
+export interface HandleClientOptions<T = HandleClientProvider> {
+    context: HandleClientContext;
+    provider: T;
 }

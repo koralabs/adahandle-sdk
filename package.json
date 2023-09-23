@@ -1,6 +1,6 @@
 {
     "name": "@koralabs/adahandle-sdk",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "description": "SDK for ADA Handle",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -23,17 +23,24 @@
         "test": "jest",
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage --watchAll=false",
-        "build": "tsc"
+        "build": "tsc",
+        "watch": "tsc --watch"
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@blockfrost/openapi": "^0.1.59",
         "@types/jest": "^28.1.6",
         "jest": "^28.1.1",
+        "jest-environment-jsdom": "^29.7.0",
         "ts-jest": "^28.0.4",
         "typescript": "^4.7.3"
     },
-    "dependencies": {},
+    "dependencies": {
+        "@koralabs/handles-public-api-interfaces": "^2.11.2",
+        "buffer": "^6.0.3",
+        "cross-fetch": "^4.0.0"
+    },
     "files": [
         "bin",
         "lib"
