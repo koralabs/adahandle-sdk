@@ -3,16 +3,20 @@ SDK for ADA Handle
 
 ## Example
 ```ts
-import ADAHandleClient, { ADAHandleClientContext, ADAHandleClientFetchResponse } from "@koralabs/adahandle-sdk"
+import HandleClient, { KoraLabsProvider, HandleClientOptions, HandleClientContext } from "@koralabs/adahandle-sdk"
 
-const myClient = new ADAHandleClient({
-    context: ADAHandleClientContext.MAINNET,
-    resolver: async (handle): ADAHandleClientFetchResponse => {
-        // Resolver to get data for the Handle.
+const options: HandleClientOptions = {
+    context: HandleClientContext.MAINNET,
+    provider: new KoraLabsProvider(HandleClientContext.MAINNET)
+};
 
-        return {
-            address: "addr1...."
-        }
-    }
-})
+const myClient = new ADAHandleClient(options)
+
+// CIP-25
+console.log(await myClient.provider().getCardanoAddress("customHandleName")) // addr123...
+console.log(await myClient.provider().getBitcoinAddress("customHandleName")) // undefined
+
+// CIP-68
+console.log(await myClient.provider().getCardanoAddress("000de14064726f706361707461696e")) // addr123...
+console.log(await myClient.provider().getBitcoinAddress("000de14064726f706361707461696e")) // bc123...
 ```
