@@ -1,6 +1,6 @@
 {
     "name": "@koralabs/adahandle-sdk",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "SDK for ADA Handle",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -24,7 +24,8 @@
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage --watchAll=false",
         "build": "tsc",
-        "watch": "tsc --watch"
+        "watch": "tsc --watch",
+        "npm:publish": "yarn build && yarn publish"
     },
     "author": "",
     "license": "ISC",
