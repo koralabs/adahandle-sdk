@@ -1,4 +1,11 @@
-import { HandleClientProvider, KoraLabsProvider } from './classes/providers';
+import { HandleClientProvider } from './classes/providers';
+
+export interface HEX {
+    value: string;
+}
+export interface Readable {
+    value: string;
+}
 
 export enum HandleClientContext {
     PREVIEW = 0,

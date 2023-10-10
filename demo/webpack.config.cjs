@@ -65,6 +65,9 @@ module.exports = {
         new webpack.DefinePlugin({
             'BLOCKFROST_PROJECT_ID': JSON.stringify(env.BLOCKFROST_PROJECT_ID),
         }),
+        new webpack.ProvidePlugin({
+            Buffer: ["buffer", "Buffer"]
+        }),
         new HtmlWebpackPlugin({
             template: './src/index.html',
             filename: 'index.html',

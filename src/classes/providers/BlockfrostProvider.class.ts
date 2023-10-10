@@ -4,7 +4,7 @@ import type { components } from '@blockfrost/openapi';
 
 import { HandleClient } from '../HandleClient.class';
 import { HandleClientProvider } from './HandleClientProvider.abstract.class';
-import { HandleClientContext } from '../../types';
+import { HEX, HandleClientContext } from '../../types';
 
 export type BlockfrostHandle =
     | ((components['schemas']['onchain_metadata_cip25'] | components['schemas']['onchain_metadata_cip68_nft_222']) & {
@@ -43,10 +43,10 @@ export class BlockfrostProvider extends HandleClientProvider<BlockfrostHandle> {
     /**
      * Retrieves the Cardano address for a given handle.
      *
-     * @param {string} handle - The handle to lookup.
+     * @param {HEX} handle - The handle to lookup.
      * @returns {Promise<string>} - A promise that resolves to the Cardano address.
      */
-    getCardanoAddress = async (handle: string): Promise<string> => {
+    getCardanoAddress = async (handle: HEX): Promise<string> => {
         if (HandleClient.isCIP68(handle)) {
             const { onchain_metadata } = await this.__handleResponse<BlockfrostHandle>(
                 fetch(
@@ -81,20 +81,15 @@ export class BlockfrostProvider extends HandleClientProvider<BlockfrostHandle> {
     /**
      * Retrieves the Bitcoin address for a given handle.
      *
-     * @param {string} handle - The handle to lookup.
+     * @param {HEX} handle - The handle to lookup.
      * @returns {Promise<string|undefined>} - A promise that resolves to the Bitcoin address, or undefined if not found.
      */
-    getBitcoinAddress = async (handle: string): Promise<string | undefined> => {
+    getBitcoinAddress = async (handle: HEX): Promise<string | undefined> => {
         if (HandleClient.isCIP68(handle)) {
             const { onchain_metadata } = await this.__handleResponse<BlockfrostHandle>(
-                fetch(
-                    `${this.apiUrl}/assets/${HandleClient.policyIds[this.network][0]}${HandleClient.getEncodedName(
-                        handle
-                    )}`,
-                    {
-                        headers: this.headers
-                    }
-                ),
+                fetch(`${this.apiUrl}/assets/${HandleClient.policyIds[this.network][0]}${handle.value}`, {
+                    headers: this.headers
+                }),
                 HandleClient.getNormalizedName(handle)
             );
 
@@ -109,20 +104,15 @@ export class BlockfrostProvider extends HandleClientProvider<BlockfrostHandle> {
     /**
      * Retrieves the Ethereum address for a given handle.
      *
-     * @param {string} handle - The handle to lookup.
+     * @param {HEX} handle - The handle to lookup.
      * @returns {Promise<string|undefined>} - A promise that resolves to the Ethereum address, or undefined if not found.
      */
-    getEthereumAddress = async (handle: string): Promise<string | undefined> => {
+    getEthereumAddress = async (handle: HEX): Promise<string | undefined> => {
         if (HandleClient.isCIP68(handle)) {
             const { onchain_metadata } = await this.__handleResponse<BlockfrostHandle>(
-                fetch(
-                    `${this.apiUrl}/assets/${HandleClient.policyIds[this.network][0]}${HandleClient.getEncodedName(
-                        handle
-                    )}`,
-                    {
-                        headers: this.headers
-                    }
-                ),
+                fetch(`${this.apiUrl}/assets/${HandleClient.policyIds[this.network][0]}${handle.value}`, {
+                    headers: this.headers
+                }),
                 HandleClient.getNormalizedName(handle)
             );
 
@@ -137,19 +127,14 @@ export class BlockfrostProvider extends HandleClientProvider<BlockfrostHandle> {
     /**
      * Retrieves all data associated with a given handle.
      *
-     * @param {string} handle - The handle to lookup.
+     * @param {HEX} handle - The handle to lookup.
      * @returns {Promise<BlockfrostHandle | IHandle>} - A promise that resolves to the handle data.
      */
-    getAllData = async (handle: string): Promise<BlockfrostHandle> => {
+    getAllData = async (handle: HEX): Promise<BlockfrostHandle> => {
         const data = await this.__handleResponse<BlockfrostHandle>(
-            fetch(
-                `${this.apiUrl}/assets/${HandleClient.policyIds[this.network][0]}${HandleClient.getEncodedName(
-                    handle
-                )}`,
-                {
-                    headers: this.headers
-                }
-            ),
+            fetch(`${this.apiUrl}/assets/${HandleClient.policyIds[this.network][0]}${handle.value}`, {
+                headers: this.headers
+            }),
             HandleClient.getNormalizedName(handle)
         );
 
@@ -160,12 +145,9 @@ export class BlockfrostProvider extends HandleClientProvider<BlockfrostHandle> {
 
         if (!result?.resolved_addresses) {
             const addresses = await this.__handleResponse<components['schemas']['asset_addresses']>(
-                fetch(
-                    `${this.apiUrl}/assets/${HandleClient.policyIds[this.network][0]}${HandleClient.getEncodedName(
-                        handle
-                    )}/addresses`,
-                    { headers: this.headers }
-                ),
+                fetch(`${this.apiUrl}/assets/${HandleClient.policyIds[this.network][0]}${handle.value}/addresses`, {
+                    headers: this.headers
+                }),
                 HandleClient.getNormalizedName(handle)
             );
             result.address = addresses?.[0]?.address;
