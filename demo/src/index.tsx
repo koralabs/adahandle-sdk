@@ -2,10 +2,10 @@ declare var BLOCKFROST_PROJECT_ID: string;
 import { Buffer } from 'buffer';
 import { FC, useCallback, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import HandleClient, { HandleClientContext, HandleClientProvider, KoraLabsProvider } from '../../lib';
+import HandleClient, { HandleClientContext, KoraLabsProvider } from '../../lib';
 import { BlockfrostHandle, BlockfrostProvider } from '../../lib/classes/providers/BlockfrostProvider.class';
 
-import { IHandle } from '@koralabs/handles-public-api-interfaces';
+import { AssetNameLabel, IHandle } from '@koralabs/handles-public-api-interfaces';
 import JSONView from 'react-json-view';
 
 const KoraInstance = new HandleClient({
@@ -29,9 +29,10 @@ const App: FC = () => {
         async (handle: string) => {
             setLoading(true);
 
-            const realHandle = (cip68 ? HandleClientProvider.CIP68_PREFIX : '') + Buffer.from(handle).toString('hex');
-            const blockfrostData = await BlockfrostInstance.provider().getAllData(realHandle);
-            const koraData = await KoraInstance.provider().getAllData(realHandle);
+            const realHandle =
+                (cip68 ? AssetNameLabel.LABEL_222 : '') + Buffer.from(handle.replace('$', '')).toString('hex');
+            const blockfrostData = await BlockfrostInstance.provider().getAllData({ value: realHandle });
+            const koraData = await KoraInstance.provider().getAllData({ value: realHandle });
 
             setLoading(false);
             blockfrostData && setBlockfrostResult(blockfrostData);
