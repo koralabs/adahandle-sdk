@@ -3,7 +3,7 @@ import fetch from 'cross-fetch';
 
 import { HandleClient } from '../HandleClient.class';
 import { HandleClientProvider } from './HandleClientProvider.abstract.class';
-import { HandleClientContext } from '../../types';
+import { HEX, HandleClientContext } from '../../types';
 
 /**
  * KoraLabsProvider class that extends HandleClientProvider and
@@ -38,13 +38,13 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
     /**
      * Retrieves the Cardano address for a given handle.
      *
-     * @param {string} handle - The handle to lookup.
+     * @param {HEX} handle - The handle to lookup, in HEX format.
      * @returns {Promise<string>} - A promise that resolves to the Cardano address.
      */
-    getCardanoAddress = async (handle: string): Promise<string> => {
+    getCardanoAddress = async (handle: HEX): Promise<string> => {
         const name = HandleClient.getNormalizedName(handle);
         const { resolved_addresses } = await this.__handleResponse<IHandle>(
-            fetch(`${this.apiUrl}/handles/${name}`, {
+            fetch(`${this.apiUrl}/handles/${name.value}`, {
                 headers: this.headers
             }),
             name
@@ -55,13 +55,13 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
     /**
      * Retrieves the Bitcoin address for a given handle.
      *
-     * @param {string} handle - The handle to lookup.
+     * @param {HEX} handle - The handle to lookup, in HEX format.
      * @returns {Promise<string|undefined>} - A promise that resolves to the Bitcoin address, or undefined if not found.
      */
-    getBitcoinAddress = async (handle: string): Promise<string | undefined> => {
+    getBitcoinAddress = async (handle: HEX): Promise<string | undefined> => {
         const name = HandleClient.getNormalizedName(handle);
         const { resolved_addresses } = await this.__handleResponse<IHandle>(
-            fetch(`${this.apiUrl}/handles/${name}`, {
+            fetch(`${this.apiUrl}/handles/${name.value}`, {
                 headers: this.headers
             }),
             name
@@ -72,13 +72,13 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
     /**
      * Retrieves the Ethereum address for a given handle.
      *
-     * @param {string} handle - The handle to lookup.
+     * @param {HEX} handle - The handle to lookup, in HEX format.
      * @returns {Promise<string|undefined>} - A promise that resolves to the Ethereum address, or undefined if not found.
      */
-    getEthereumAddress = async (handle: string): Promise<string | undefined> => {
+    getEthereumAddress = async (handle: HEX): Promise<string | undefined> => {
         const name = HandleClient.getNormalizedName(handle);
         const { resolved_addresses } = await this.__handleResponse<IHandle>(
-            fetch(`${this.apiUrl}/handles/${name}`, {
+            fetch(`${this.apiUrl}/handles/${name.value}`, {
                 headers: this.headers
             }),
             name
@@ -89,13 +89,13 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
     /**
      * Retrieves all data associated with a given handle.
      *
-     * @param {string} handle - The handle to lookup.
+     * @param {HEX} handle - The handle to lookup, in HEX format.
      * @returns {Promise<IHandle>} - A promise that resolves to the handle data.
      */
-    getAllData = async (handle: string): Promise<IHandle> => {
+    getAllData = async (handle: HEX): Promise<IHandle> => {
         const name = HandleClient.getNormalizedName(handle);
         return this.__handleResponse<IHandle>(
-            fetch(`${this.apiUrl}/handles/${name}`, {
+            fetch(`${this.apiUrl}/handles/${name.value}`, {
                 headers: this.headers
             }),
             name

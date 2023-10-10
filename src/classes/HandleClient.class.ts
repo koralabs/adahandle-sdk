@@ -1,7 +1,7 @@
 import { AssetNameLabel } from '@koralabs/handles-public-api-interfaces';
-import { HandleClientContext, HandleClientOptions } from '../types';
-import { isHex } from '../utils/hex';
+import { HEX, HandleClientContext, HandleClientOptions, Readable } from '../types';
 import { KoraLabsProvider } from './providers/KoraLabsProvider.class';
+import { isHex } from '../utils/hex';
 
 export class HandleClient<T = KoraLabsProvider> {
     private options: HandleClientOptions<T>;
@@ -42,34 +42,42 @@ export class HandleClient<T = KoraLabsProvider> {
     /**
      * Utility method to check whether a handle is a CIP-68 handle.
      *
-     * @param {string} handle - The handle to check in its HEX encoded format.
+     * @param {HEX} handle - The handle to check in its HEX encoded format.
      * @returns {boolean} - Whether the handle is CIP-68 or not.
      * @throws
      */
-    static isCIP68(handle: string): boolean {
-        return handle.indexOf(AssetNameLabel.LABEL_222) === 0;
+    static isCIP68(handle: HEX): boolean {
+        return handle.value.indexOf(AssetNameLabel.LABEL_222) === 0;
     }
 
     /**
      * Utility method to get the normalized name of a CIP-68 or CIP-25 handle.
      *
-     * @param {string} handle - The CIP-68 or CIP-25 handle to parse, in HEX format.
-     * @returns {string}
+     * @param {HEX} handle - The CIP-68 or CIP-25 handle to parse, in HEX format.
+     * @returns {Readable}
+     * @throws
      */
-    static getNormalizedName(handle: string): string {
-        const hexName = HandleClient.isCIP68(handle) ? handle.replace(AssetNameLabel.LABEL_222, '') : handle;
-        return Buffer.from(hexName, 'hex').toString('utf-8');
+    static getNormalizedName(handle: HEX): Readable {
+        if (!isHex(handle.value) || handle.value === '') {
+            throw new Error('To get a normalized name, you must provide a valid HEX encoded name.');
+        }
+
+        const hexName = HandleClient.isCIP68(handle)
+            ? handle.value.replace(AssetNameLabel.LABEL_222, '')
+            : handle.value;
+
+        return { value: Buffer.from(hexName, 'hex').toString('utf-8') };
     }
 
     /**
      * Utility method to get the HEX-encoded name of the CIP-68 or CIP-25 handle.
      *
-     * @param {string} handle - The CIP-68 or CIP-25 handle to parse, in UTF-8 format.
-     * @returns {string}
+     * @param {Readable} handle - The CIP-68 or CIP-25 handle to parse, in UTF-8 format.
+     * @returns {HEX}
      * @throws
      */
-    static getEncodedName(handle: string, assetNameLabel?: AssetNameLabel): string {
-        const name = Buffer.from(handle).toString('hex');
-        return assetNameLabel ? `${assetNameLabel}${name}` : name;
+    static getEncodedName(handle: HEX, assetNameLabel?: AssetNameLabel): HEX {
+        const name = Buffer.from(handle.value).toString('hex');
+        return { value: assetNameLabel ? `${assetNameLabel}${name}` : name };
     }
 }

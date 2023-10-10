@@ -1,7 +1,7 @@
 import { AssetNameLabel } from '@koralabs/handles-public-api-interfaces';
 import { HandleClient } from '../classes/HandleClient.class';
 import { HandleClientProvider, KoraLabsProvider } from '../classes/providers';
-import { HandleClientContext, HandleClientOptions } from '../types';
+import { HEX, HandleClientContext, HandleClientOptions } from '../types';
 
 let client: HandleClient;
 
@@ -10,25 +10,25 @@ class CustomProvider extends HandleClientProvider {
         super();
     }
 
-    getCardanoAddress = async (handle: string) => {
+    getCardanoAddress = async (handle: HEX) => {
         return new Promise<string>((res) => {
             setTimeout(() => res('cardanoaddress'), 1000);
         });
     };
 
-    getBitcoinAddress = async (handle: string) => {
+    getBitcoinAddress = async (handle: HEX) => {
         return new Promise<string>((res) => {
             setTimeout(() => res('bitcoinaddress'), 1000);
         });
     };
 
-    getEthereumAddress = async (handle: string) => {
+    getEthereumAddress = async (handle: HEX) => {
         return new Promise<string>((res) => {
             setTimeout(() => res('ethereumaddress'), 1000);
         });
     };
 
-    getAllData = async (handle: string) => {
+    getAllData = async (handle: HEX) => {
         return new Promise<Record<string, string>>((res) => {
             setTimeout(
                 () =>
@@ -109,26 +109,34 @@ describe('HandleClient', () => {
 
         const provider = customClient.provider();
         expect(provider).toBeInstanceOf(CustomProvider);
-        expect(await provider.getCardanoAddress('myhandle')).toEqual('cardanoaddress');
-        expect(await provider.getBitcoinAddress('myhandle')).toEqual('bitcoinaddress');
-        expect(await provider.getEthereumAddress('myhandle')).toEqual('ethereumaddress');
-        expect(await provider.getAllData('myhandle')).toMatchObject({
+        expect(await provider.getCardanoAddress({ value: 'myhandle' })).toEqual('cardanoaddress');
+        expect(await provider.getBitcoinAddress({ value: 'myhandle' })).toEqual('bitcoinaddress');
+        expect(await provider.getEthereumAddress({ value: 'myhandle' })).toEqual('ethereumaddress');
+        expect(await provider.getAllData({ value: 'myhandle' })).toMatchObject({
             name: 'customdata'
         });
     });
 
     test('isCIP68', () => {
-        expect(HandleClient.isCIP68('000de140706f707a')).toBeTruthy();
-        expect(HandleClient.isCIP68('63616c76696e')).toBeFalsy();
+        expect(HandleClient.isCIP68({ value: '000de140706f707a' })).toBeTruthy();
+        expect(HandleClient.isCIP68({ value: '63616c76696e' })).toBeFalsy();
     });
 
     test('getNormalizedName', () => {
-        expect(HandleClient.getNormalizedName('000de140706f707a')).toEqual('popz');
-        expect(HandleClient.getNormalizedName('63616c76696e')).toEqual('calvin');
+        expect(HandleClient.getNormalizedName({ value: '000de140706f707a' })).toEqual({ value: 'popz' });
+        expect(HandleClient.getNormalizedName({ value: '63616c76696e' })).toEqual({ value: 'calvin' });
+        expect(() => HandleClient.getNormalizedName({ value: 'papagoose' })).toThrowError(
+            'To get a normalized name, you must provide a valid HEX encoded name.'
+        );
+        expect(() => HandleClient.getNormalizedName({ value: '' })).toThrowError(
+            'To get a normalized name, you must provide a valid HEX encoded name.'
+        );
     });
 
     test('getEncodedName', () => {
-        expect(HandleClient.getEncodedName('popz', AssetNameLabel.LABEL_222)).toEqual('000de140706f707a');
-        expect(HandleClient.getEncodedName('calvin')).toEqual('63616c76696e');
+        expect(HandleClient.getEncodedName({ value: 'popz' }, AssetNameLabel.LABEL_222)).toEqual({
+            value: '000de140706f707a'
+        });
+        expect(HandleClient.getEncodedName({ value: 'calvin' })).toEqual({ value: '63616c76696e' });
     });
 });
