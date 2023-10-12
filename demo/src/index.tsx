@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client';
 import HandleClient, { HandleClientContext, KoraLabsProvider } from '../../lib';
 import { BlockfrostHandle, BlockfrostProvider } from '../../lib/classes/providers/BlockfrostProvider.class';
 
-import { AssetNameLabel, IHandle } from '@koralabs/handles-public-api-interfaces';
+import { AssetNameLabel, IHandle, IPersonalization } from '@koralabs/handles-public-api-interfaces';
 import JSONView from 'react-json-view';
 
 const KoraInstance = new HandleClient({
@@ -23,6 +23,7 @@ const App: FC = () => {
     const [cip68, setCip68] = useState(false);
     const [blockfrostResult, setBlockfrostResult] = useState<BlockfrostHandle | IHandle>();
     const [koraResult, setKoraResult] = useState<IHandle>();
+    const [personalizedResult, setPersonalizedResult] = useState<IPersonalization>();
     const [loading, setLoading] = useState(false);
 
     const handleSearch = useCallback(
@@ -33,10 +34,12 @@ const App: FC = () => {
                 (cip68 ? AssetNameLabel.LABEL_222 : '') + Buffer.from(handle.replace('$', '')).toString('hex');
             const blockfrostData = await BlockfrostInstance.provider().getAllData({ value: realHandle });
             const koraData = await KoraInstance.provider().getAllData({ value: realHandle });
+            const personalizedData = await KoraInstance.provider().getPersonalizedData({ value: realHandle });
 
             setLoading(false);
             blockfrostData && setBlockfrostResult(blockfrostData);
             koraData && setKoraResult(koraData);
+            personalizedData && setPersonalizedResult(personalizedData);
         },
         [cip68]
     );
@@ -90,6 +93,13 @@ const App: FC = () => {
                             <div>
                                 <h4>Kora Labs Result</h4>
                                 <JSONView src={koraResult} />
+                            </div>
+                        )}
+
+                        {personalizedResult && (
+                            <div>
+                                <h4>Personalized Result</h4>
+                                <JSONView src={personalizedResult} />
                             </div>
                         )}
                     </div>

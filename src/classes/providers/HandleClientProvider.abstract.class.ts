@@ -1,5 +1,6 @@
 import { isHex } from '../../utils/hex';
 import { HEX, Readable } from '../../types';
+import { IPersonalization } from '@koralabs/handles-public-api-interfaces';
 
 /**
  * Abstract class `HandleClientProvider` serving as a template for
