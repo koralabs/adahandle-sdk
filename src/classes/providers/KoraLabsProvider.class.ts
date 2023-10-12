@@ -1,4 +1,4 @@
-import { IHandle } from '@koralabs/handles-public-api-interfaces';
+import { IHandle, IPersonalization } from '@koralabs/handles-public-api-interfaces';
 import fetch from 'cross-fetch';
 
 import { HandleClient } from '../HandleClient.class';
@@ -96,6 +96,37 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
         const name = HandleClient.getNormalizedName(handle);
         return this.__handleResponse<IHandle>(
             fetch(`${this.apiUrl}/handles/${name.value}`, {
+                headers: this.headers
+            }),
+            name
+        );
+    };
+
+    /**
+     * Retrieves all personalized data associated with a given handle.
+     *
+     * @param {HEX} handle - The handle to lookup, in HEX format.
+     * @returns {Promise<IPersonalization>} - A promise that resolves to the handle data.
+     *
+     * @example
+     * {
+     *  "validated_by": "0x4da965a049dfd15ed1ee19fba6e2974a0b79fc416dd1796a1f97f5e1",
+     *  "trial": false,
+     *  "nsfw": false,
+     *  "designer": {
+     *      "bg_color": "0x8600ffbd",
+     *      "creator_defaults_enabled": 0,
+     *      "bg_border_color": "0xff5400e0",
+     *      "font_shadow_color": "0x100202ff",
+     *      "font_shadow_size": [9, 8, 8],
+     *      "text_ribbon_colors": ["0x4858ffff"]
+     *  }
+     * }
+     */
+    getPersonalizedData = async (handle: HEX): Promise<IPersonalization> => {
+        const name = HandleClient.getNormalizedName(handle);
+        return this.__handleResponse<IPersonalization>(
+            fetch(`${this.apiUrl}/handles/${name.value}/personalized`, {
                 headers: this.headers
             }),
             name
