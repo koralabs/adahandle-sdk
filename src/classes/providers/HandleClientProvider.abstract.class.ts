@@ -50,18 +50,22 @@ export abstract class HandleClientProvider<T = {}> {
      * @param {HEX} handle - The handle supplied to the lookup.
      * @returns
      */
-    protected async __handleResponse<T>(api: Promise<Response>, handle: Readable) {
+    protected async __handleResponse<T>(api: Promise<Response>, handle?: Readable) {
         return api
             .then((res) => res.json() as T)
             .catch((e) => {
-                console.error(
-                    `Something went wrong while fetching this Handle: ${handle.value}.${
-                        isHex(handle.value)
-                            ? ` You may need to convert the Handle name to UTF-8 before providing it to this function.`
-                            : ''
-                    } Here is the full error:`,
-                    e
-                );
+                if (handle) {
+                    console.error(
+                        `Something went wrong while fetching this Handle: ${handle.value}.${
+                            isHex(handle.value)
+                                ? ` You may need to convert the Handle name to UTF-8 before providing it to this function.`
+                                : ''
+                        } Here is the full error:`,
+                        e
+                    );
+                } else {
+                    console.error(e);
+                }
 
                 return {} as T;
             });

@@ -103,6 +103,23 @@ export class KoraLabsProvider extends HandleClientProvider<IHandle> {
     };
 
     /**
+     * Retrieves all data associated with a list of given handles.
+     *
+     * @param {HEX[]} handles - The handles to lookup, in HEX format.
+     * @returns {Promise<IHandle[]>} - A promise that resolves to an array of handle data.
+     */
+    getAllDataBatch = async (handles: HEX[]): Promise<IHandle[]> => {
+        const names = handles.map((h) => HandleClient.getNormalizedName(h).value);
+        return this.__handleResponse<IHandle[]>(
+            fetch(`${this.apiUrl}/handles/list`, {
+                headers: this.headers,
+                method: 'POST',
+                body: JSON.stringify(names)
+            })
+        );
+    };
+
+    /**
      * Retrieves all personalized data associated with a given handle.
      *
      * @param {HEX} handle - The handle to lookup, in HEX format.
