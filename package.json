@@ -1,6 +1,6 @@
 {
     "name": "@koralabs/adahandle-sdk",
-    "version": "1.5.3",
+    "version": "1.5.4",
     "description": "SDK for ADA Handle",
     "main": "index.js",
     "types": "index.d.ts",
@@ -42,9 +42,5 @@
         "@koralabs/handles-public-api-interfaces": "^2.11.2",
         "buffer": "^6.0.3",
         "cross-fetch": "^4.0.0"
-    },
-    "files": [
-        "bin",
-        "lib"
-    ]
+    }
 }
