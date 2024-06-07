@@ -1,0 +1,27 @@
+name: adahandle-sdk
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    name: Deploying from ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+
+    - name: Publish ${{ github.workflow }}
+      id: publish
+      env:
+        DEPLOYMENT_ACCESS_TOKEN: ${{ secrets.DEPLOYMENT_ACCESS_TOKEN }}
+        SECRETS_CONTEXT: ${{ toJson(secrets) }}
+        VARS_CONTEXT: ${{ toJson(vars) }}
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+        DEPLOYMENT_TYPE: npm-publish
+        NODE_VERSION: 20
+        IS_PUBLIC: true
+      run: |
+        set -eu
+        curl -H "Authorization: Bearer ${DEPLOYMENT_ACCESS_TOKEN}" https://raw.githubusercontent.com/koralabs/adahandle-deployments/master/common/main.sh -o main.sh
+        chmod +x main.sh && ./main.sh
