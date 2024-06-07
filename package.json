@@ -21,6 +21,7 @@
     ],
     "scripts": {
         "test": "jest",
+        "lint": "echo No linting configured",
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage --watchAll=false",
         "build": "tsc",
