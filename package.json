@@ -1,6 +1,6 @@
 {
     "name": "@koralabs/adahandle-sdk",
-    "version": "1.5.4",
+    "version": "1.5.5",
     "description": "SDK for ADA Handle",
     "main": "index.js",
     "types": "index.d.ts",
