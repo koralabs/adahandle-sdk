@@ -1,0 +1,20 @@
+# Exact repository-root-relative paths. No wildcards, no directory prefixes.
+# A change to any of these needs operator approval at merge time (see CANONICAL_CONTRACT.md).
+.enclave
+CANONICAL_CONTRACT.md
+# Invariants 1-3: which policy is "a Handle" and how names and addresses are resolved
+src/classes/HandleClient.class.ts
+src/classes/providers/HandleClientProvider.abstract.class.ts
+src/classes/providers/KoraLabsProvider.class.ts
+src/classes/providers/BlockfrostProvider.class.ts
+src/utils/hex.ts
+src/types.ts
+src/index.ts
+# Tests that carry the name-encoding and policy invariants
+src/__tests__/HandleClient.test.ts
+src/__tests__/KoraLabsProvider.test.ts
+src/__tests__/BlockfrostProvider.test.ts
+src/__tests__/utils.test.ts
+# Invariant 4: what gets published to npm
+package.json
+.github/workflows/deploy.yml
