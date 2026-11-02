@@ -4,31 +4,53 @@ on:
     branches:
       - master
     paths-ignore:
-      - '.local-test-evidence.json'
+      - '.github/**'
+      - 'docs/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
 jobs:
   deploy:
     name: Deploying from ${{ github.ref_name }}
+    environment: mainnet
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v1
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Verify local test evidence (tests run locally, never in Actions)
       run: |
         c=$(jq -er 'select(.result == "pass") | .commit' .local-test-evidence.json) && git diff --quiet "$c" HEAD -- . ':!.local-test-evidence.json' || { echo "::error::no valid local test evidence for this commit: run adahandle-deployments/common/test-evidence.sh record locally and push the evidence commit"; exit 1; }
 
-    - name: Publish ${{ github.workflow }}
-      id: publish
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 26
+        registry-url: https://registry.npmjs.org
+
+    - name: Install
+      run: npm ci
+
+    - name: Build
+      run: npm run build
+
+    # Publishes only versions the registry lacks, so unchanged-version pushes never fail.
+    - name: Publish to npmjs
       env:
-        DEPLOYMENT_ACCESS_TOKEN: ${{ secrets.DEPLOYMENT_ACCESS_TOKEN }}
-        SECRETS_CONTEXT: ${{ toJson(secrets) }}
-        VARS_CONTEXT: ${{ toJson(vars) }}
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-        DEPLOYMENT_TYPE: npm-publish
-        NODE_VERSION: 26
-        IS_PUBLIC: true
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        PUBDIR: ./lib
       run: |
-        set -eu
-        curl -H "Authorization: Bearer ${DEPLOYMENT_ACCESS_TOKEN}" https://raw.githubusercontent.com/koralabs/adahandle-deployments/master/common/main.sh -o main.sh
-        chmod +x main.sh && ./main.sh
+        V=$(node -p "require('./package.json').version")
+        if [ "$(npm view @koralabs/adahandle-sdk@$V version 2>/dev/null)" = "$V" ]; then echo "already on npmjs"; exit 0; fi
+        cd "./lib" && npm publish --access public
+
+    - name: Publish to GitHub Packages
+      env:
+        PUBDIR: ./lib
+      run: |
+        V=$(node -p "require('./package.json').version")
+        if [ "$(npm view @koralabs/adahandle-sdk@$V version --@koralabs:registry=https://npm.pkg.github.com --//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }} 2>/dev/null)" = "$V" ]; then echo "already on GitHub Packages"; exit 0; fi
+        npm config set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
+        (cd "./lib" && npm publish --@koralabs:registry='https://npm.pkg.github.com')
