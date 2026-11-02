@@ -10,17 +10,17 @@
 To setup the demo environment, from the root directory, run:
 
 ```bash
-yarn watch
+npm run watch
 ```
 
 Then run:
 
 ```bash
-cd demo && yarn && yarn start
+cd demo && npm install && npm start
 ```
 
 To clean up, from the root directory, run:
 
 ```bash
-yarn unlink
+npm unlink
 ```

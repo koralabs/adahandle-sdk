@@ -26,13 +26,14 @@
         "test:coverage": "jest --coverage --watchAll=false",
         "build": "tsc && cp package.json ./lib/package.json",
         "watch": "tsc --watch",
-        "npm:publish": "yarn build && cp package.json ./lib/package.json && (cd ./lib && npm publish)"
+        "npm:publish": "npm run build && cp package.json ./lib/package.json && (cd ./lib && npm publish)"
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
         "@blockfrost/openapi": "^0.1.59",
         "@types/jest": "^28.1.6",
+        "@types/node": "^20.19.43",
         "jest": "^28.1.1",
         "jest-environment-jsdom": "^29.7.0",
         "ts-jest": "^28.0.4",
