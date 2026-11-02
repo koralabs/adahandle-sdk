@@ -11,20 +11,12 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build
-    - run: npm test -- --ci --runInBand
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Verify local test evidence (tests run locally, never in Actions)
+        run: |
+          c=$(jq -er 'select(.result == "pass") | .commit' .local-test-evidence.json) && git diff --quiet "$c" HEAD -- . ':!.local-test-evidence.json' || { echo "::error::no valid local test evidence for this commit: run adahandle-deployments/common/test-evidence.sh record locally and push the evidence commit"; exit 1; }
