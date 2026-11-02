@@ -24,7 +24,7 @@ jobs:
         VARS_CONTEXT: ${{ toJson(vars) }}
         GITHUB_CONTEXT: ${{ toJson(github) }}
         DEPLOYMENT_TYPE: npm-publish
-        NODE_VERSION: 20
+        NODE_VERSION: 26
         IS_PUBLIC: true
       run: |
         set -eu
