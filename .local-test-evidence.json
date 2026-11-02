@@ -1,6 +1,6 @@
 {
-  "commit": "5b4dbb556d4580b5babb757504858f38d6eedce8",
+  "commit": "d1dbdc3e5149584d8deb8fc251728000b7911763",
   "result": "pass",
-  "command": "npm test -- --maxWorkers=4",
-  "at": "2026-11-02T06:35:57Z"
+  "command": "scripts/local-tests.sh",
+  "at": "2026-11-02T07:25:43Z"
 }
